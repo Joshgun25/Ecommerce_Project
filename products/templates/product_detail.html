@@ -1,0 +1,39 @@
+<!-- product_detail.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+</head>
+<body>
+    <h1>Product Detail</h1>
+    <p><strong>Name:</strong> {{ product.name }}</p>
+    <p><strong>Price:</strong> ${{ product.price }}</p>
+    <p><strong>Creator Email:</strong> {{ product.creator_email }}</p>
+    <p><strong>Created At:</strong> {{ product.created_at }}</p>
+
+    {% if product.image %}
+    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% endif %}
+
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+            <li>{{ comment.text }} - by {{ comment.user_email }} ({{ comment.created_at }})</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a Comment</h2>
+    <form method="post" action="{% url 'add-comment' pk=product.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="user_email" value="sample@gmail.com" >
+        <label for="comment_text">Comment:</label><br>
+        <textarea id="comment_text" name="text"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <a href="{% url 'product-list' %}">Back to Product List</a>
+</body>
+</html>
